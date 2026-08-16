@@ -8,17 +8,17 @@ async function main() {
     await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
     await page.waitForTimeout(5000);
 
-    const inputs = await page.$$eval('input', els =>
-      els.map(el => ({
-        type: el.type,
-        placeholder: el.placeholder,
-        name: el.name,
-        id: el.id
-      }))
-    );
+    await page.fill('input[name="email"]', 'squirrel.1506264');
+    await page.fill('input[name="pass"]', 'Goku2001');
 
-    console.log('CAMPOS ENCONTRADOS:');
-    console.log(JSON.stringify(inputs, null, 2));
+    console.log('Datos escritos ✅');
+
+    await page.click('button[type="submit"], input[type="submit"]');
+    console.log('Botón de login presionado ✅');
+
+    await page.waitForTimeout(3000);
+
+    console.log('Login probado con éxito ✅');
 
   } catch (error) {
     console.error('Error en el bot:', error.message);

@@ -13,7 +13,7 @@ async function main() {
   const page = await context.newPage();
 
   try {
-    await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
+    await page.goto('url De mi Web', { waitUntil: 'networkidle' });
     await page.waitForTimeout(10000);
 
     await page.fill('input[name="email"]', 'squirrel.1506264');

@@ -13,7 +13,8 @@ async function main() {
   const page = await context.newPage();
 
   try {
-    await page.goto('url De mi Web', { waitUntil: 'networkidle' });
+    // ===== PARTE 1: tu red social (esto ya lo tenías, no lo toqué) =====
+    await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
     await page.waitForTimeout(10000);
 
     await page.fill('input[name="email"]', 'squirrel.1506264');
@@ -44,6 +45,29 @@ async function main() {
 
     console.log('CAMPOS DESPUÉS DE VERIFICAR:');
     console.log(JSON.stringify(campos, null, 2));
+
+    // ===== PARTE 2: tu versión de Gmail (esto es lo nuevo) =====
+    const gmailPage = await context.newPage();
+
+    await gmailPage.goto('AQUI VA TU URL VERSION DE GMAIL', { waitUntil: 'networkidle' });
+    await gmailPage.waitForTimeout(5000);
+
+    await gmailPage.fill('input[name="email"]', 'AQUI VA TU CORREO DE VERSION GMAIL');
+    await gmailPage.fill('input[name="password"]', 'AQUI VA TU CONTRASEÑA VERSION GMAIL');
+    console.log('Datos de Gmail escritos ✅');
+
+    await gmailPage.click('button[type="submit"]');
+    console.log('Login de Gmail enviado ✅');
+
+    await gmailPage.waitForTimeout(6000);
+
+    // OJO: ".mensaje" es un nombre de prueba. Si no funciona, es porque
+    // tu bandeja usa otro nombre para cada mensaje (te ayudo a encontrarlo).
+    await gmailPage.waitForSelector('.mensaje', { timeout: 10000 });
+    const ultimoMensaje = await gmailPage.$eval('.mensaje', el => el.innerText);
+
+    console.log('ÚLTIMO MENSAJE RECIBIDO:');
+    console.log(ultimoMensaje);
 
   } catch (error) {
     console.error('Error en el bot:', error.message);

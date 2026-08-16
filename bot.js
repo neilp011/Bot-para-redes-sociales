@@ -6,7 +6,7 @@ async function main() {
 
   try {
     // 👉 PON AQUÍ LA URL DE TU PÁGINA DE LOGIN
-    await page.goto('https://www.instagram.com/');
+    await page.goto('https://www.instagram.com/accounts/login/');
     console.log('Página de login cargada ✅');
 
     // Espera a que aparezca el campo de usuario

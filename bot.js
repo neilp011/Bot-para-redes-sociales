@@ -1,4 +1,4 @@
-  const { chromium } = require('playwright');
+const { chromium } = require('playwright');
 
 async function main() {
   const browser = await chromium.launch({
@@ -53,21 +53,32 @@ async function main() {
     console.log('CAMPOS DESPUÉS DE VERIFICAR:');
     console.log(JSON.stringify(campos, null, 2));
 
-    // ===== PARTE 2: tu versión de Gmail =====
+    // ===== PARTE 2: tu versión de Gmail (login en 2 pasos: correo, luego contraseña) =====
     const gmailPage = await context.newPage();
 
     await gmailPage.goto('https://accounts.google.com', { waitUntil: 'networkidle' });
     await gmailPage.waitForTimeout(5000);
 
-    await gmailPage.fill('input[name="email"]', 'gringoparker6@gmail.com');
-    await gmailPage.fill('input[name="password"]', 'goku2001');
-    console.log('Datos de Gmail escritos ✅');
+    // Paso 1: escribir el correo y avanzar
+    await gmailPage.fill('input[type="email"]', 'gringoparker6@gmail.com');
+    console.log('Correo de Gmail escrito ✅');
 
-    await gmailPage.click('button[type="submit"]');
+    await gmailPage.click('text=Siguiente');
+    console.log('Botón Siguiente presionado ✅');
+
+    await gmailPage.waitForTimeout(4000);
+
+    // Paso 2: ahora que cambió de pantalla, escribir la contraseña
+    await gmailPage.fill('input[type="password"]', 'goku2001');
+    console.log('Contraseña de Gmail escrita ✅');
+
+    await gmailPage.click('text=Siguiente');
     console.log('Login de Gmail enviado ✅');
 
     await gmailPage.waitForTimeout(6000);
 
+    // OJO: ".mensaje" es un nombre de prueba. Si tu bandeja usa otro nombre
+    // para cada mensaje, hay que cambiarlo (te ayudo a encontrarlo).
     await gmailPage.waitForSelector('.mensaje', { timeout: 10000 });
     const ultimoMensaje = await gmailPage.$eval('.mensaje', el => el.innerText);
 

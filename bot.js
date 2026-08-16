@@ -25,21 +25,25 @@ async function main() {
 
     await page.waitForTimeout(8000);
 
+    await page.fill('input[placeholder="Code"]', '370720');
+    console.log('Código escrito ✅');
+
+    await page.click('text=Continue');
+    console.log('Verificación enviada ✅');
+
+    await page.waitForTimeout(8000);
+
     const campos = await page.$$eval('input, textarea', els =>
       els.map(el => ({
         tag: el.tagName,
         type: el.type,
         placeholder: el.placeholder,
-        name: el.name,
-        id: el.id
+        name: el.name
       }))
     );
 
-    console.log('CAMPOS DESPUÉS DEL LOGIN:');
+    console.log('CAMPOS DESPUÉS DE VERIFICAR:');
     console.log(JSON.stringify(campos, null, 2));
-
-    await page.screenshot({ path: 'vista.png', fullPage: true });
-    console.log('Captura tomada ✅');
 
   } catch (error) {
     console.error('Error en el bot:', error.message);

@@ -1,4 +1,5 @@
-const { chromium } = require('playwright');
+
+    const { chromium } = require('playwright');
 
 async function main() {
   const browser = await chromium.launch({
@@ -13,7 +14,7 @@ async function main() {
   const page = await context.newPage();
 
   try {
-    // ===== PARTE 1: tu red social (esto ya lo tenías, no lo toqué) =====
+    // ===== PARTE 1: tu red social =====
     await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
     await page.waitForTimeout(10000);
 
@@ -26,13 +27,22 @@ async function main() {
 
     await page.waitForTimeout(8000);
 
-    await page.fill('input[placeholder="Code"]', '370720');
-    console.log('Código escrito ✅');
+    // Antes esto se trababa si no aparecía la casilla del código.
+    // Ahora: espera máximo 8 segundos, y si no aparece, sigue sin romperse.
+    const casillaCodigo = page.locator('input[placeholder="Code"]');
+    const apareceCodigo = await casillaCodigo.isVisible({ timeout: 8000 }).catch(() => false);
 
-    await page.click('text=Continue');
-    console.log('Verificación enviada ✅');
+    if (apareceCodigo) {
+      await casillaCodigo.fill('370720');
+      console.log('Código escrito ✅');
 
-    await page.waitForTimeout(8000);
+      await page.click('text=Continue');
+      console.log('Verificación enviada ✅');
+
+      await page.waitForTimeout(8000);
+    } else {
+      console.log('No pidió código de verificación esta vez, seguimos ✅');
+    }
 
     const campos = await page.$$eval('input, textarea', els =>
       els.map(el => ({
@@ -46,7 +56,7 @@ async function main() {
     console.log('CAMPOS DESPUÉS DE VERIFICAR:');
     console.log(JSON.stringify(campos, null, 2));
 
-    // ===== PARTE 2: tu versión de Gmail (esto es lo nuevo) =====
+    // ===== PARTE 2: tu versión de Gmail =====
     const gmailPage = await context.newPage();
 
     await gmailPage.goto('https://accounts.google.com/v3/signin/identifier?continue=https://mail.google.com/mail/?service%3Dmail%26flowName%3DGlifWebSignIn%26flowEntry%3DAccountChooser%26ec%3Dasw-gmail-globalnav-signin&uj=gafb-gmail_asw-def-es-419&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S539464064:1786900556468188', { waitUntil: 'networkidle' });
@@ -61,8 +71,6 @@ async function main() {
 
     await gmailPage.waitForTimeout(6000);
 
-    // OJO: ".mensaje" es un nombre de prueba. Si no funciona, es porque
-    // tu bandeja usa otro nombre para cada mensaje (te ayudo a encontrarlo).
     await gmailPage.waitForSelector('.mensaje', { timeout: 10000 });
     const ultimoMensaje = await gmailPage.$eval('.mensaje', el => el.innerText);
 

@@ -14,11 +14,11 @@ async function main() {
 
     // Llena el campo de usuario/correo
     // 👉 PON AQUÍ EL USUARIO O CORREO DE TU CUENTA DE PRUEBA
-    await page.fill('input[type="text"], input[type="email"]', 'dakota.nunz');
+    await page.fill('input[type="text"], input[type="email"]', 'squirrel.1506264');
 
     // Llena el campo de contraseña
     // 👉 PON AQUÍ LA CONTRASEÑA DE TU CUENTA DE PRUEBA
-    await page.fill('input[type="password"]', 'tu_contraseña_aqui');
+    await page.fill('input[type="password"]', 'goku2001');
 
     console.log('Datos escritos ✅');
 

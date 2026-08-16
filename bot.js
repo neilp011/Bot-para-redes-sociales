@@ -9,11 +9,11 @@ async function main() {
     await page.waitForTimeout(5000);
 
     await page.fill('input[name="email"]', 'squirrel.1506264');
-    await page.fill('input[name="pass"]', 'Goku2001');
+    await page.fill('input[name="pass"]', 'goku2001');
 
     console.log('Datos escritos ✅');
 
-    await page.click('button[type="submit"], input[type="submit"]');
+    await page.locator('input[type="submit"]').dispatchEvent('click');
     console.log('Botón de login presionado ✅');
 
     await page.waitForTimeout(3000);

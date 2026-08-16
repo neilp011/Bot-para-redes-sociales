@@ -5,8 +5,8 @@ async function main() {
   const page = await browser.newPage();
 
   try {
-    await page.goto('https://www.instagram.com/accounts/login/');
-    await page.waitForTimeout(3000);
+    await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(5000);
 
     const inputs = await page.$$eval('input', els =>
       els.map(el => ({

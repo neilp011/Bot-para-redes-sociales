@@ -5,7 +5,7 @@ async function main() {
   const page = await browser.newPage();
 
   try {
-    await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
+    await page.goto('tu url aqui', { waitUntil: 'networkidle' });
     await page.waitForTimeout(10000);
 
     await page.screenshot({ path: 'vista.png', fullPage: true });

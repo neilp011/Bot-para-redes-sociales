@@ -1,8 +1,16 @@
 const { chromium } = require('playwright');
 
 async function main() {
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
+  const browser = await chromium.launch({
+    args: ['--disable-blink-features=AutomationControlled']
+  });
+
+  const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    viewport: { width: 1280, height: 800 }
+  });
+
+  const page = await context.newPage();
 
   try {
     await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });

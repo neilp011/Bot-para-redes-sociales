@@ -6,7 +6,7 @@ async function main() {
 
   try {
     // 👉 PON AQUÍ LA URL DE TU PÁGINA DE LOGIN
-    await page.goto('https://tu-red-social.com/login');
+    await page.goto('https://www.instagram.com/');
     console.log('Página de login cargada ✅');
 
     // Espera a que aparezca el campo de usuario

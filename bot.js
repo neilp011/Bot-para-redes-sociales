@@ -6,14 +6,25 @@ async function main() {
 
   try {
     await page.goto('https://www.instagram.com/accounts/login/');
-    console.log('Página cargada ✅');
+    console.log('Página de login cargada ✅');
+
+    await page.waitForSelector('input[placeholder*="username" i], input[placeholder*="email" i]');
+
+    await page.fill('input[placeholder*="username" i], input[placeholder*="email" i]', 'squirrel.1506264');
+    await page.fill('input[placeholder*="assword" i]', 'Goku2001');
+
+    console.log('Datos escritos ✅');
+
+    await page.click('text=Log in');
+    console.log('Botón de login presionado ✅');
 
     await page.waitForTimeout(3000);
-    await page.screenshot({ path: 'vista.png', fullPage: true });
-    console.log('Captura tomada ✅');
+
+    console.log('Login probado con éxito ✅');
 
   } catch (error) {
     console.error('Error en el bot:', error.message);
+    await page.screenshot({ path: 'error.png' });
   } finally {
     await browser.close();
   }

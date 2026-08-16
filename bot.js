@@ -14,7 +14,7 @@ async function main() {
 
     // Llena el campo de usuario/correo
     // 👉 PON AQUÍ EL USUARIO O CORREO DE TU CUENTA DE PRUEBA
-    await page.fill('input[type="text"], input[type="email"]', 'tu_usuario_aqui');
+    await page.fill('input[type="text"], input[type="email"]', 'dakota.nunz');
 
     // Llena el campo de contraseña
     // 👉 PON AQUÍ LA CONTRASEÑA DE TU CUENTA DE PRUEBA

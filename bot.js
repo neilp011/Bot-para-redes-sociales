@@ -49,11 +49,11 @@ async function main() {
     // ===== PARTE 2: tu versión de Gmail (esto es lo nuevo) =====
     const gmailPage = await context.newPage();
 
-    await gmailPage.goto('AQUI VA TU URL VERSION DE GMAIL', { waitUntil: 'networkidle' });
+    await gmailPage.goto('https://accounts.google.com/v3/signin/identifier?continue=https://mail.google.com/mail/?service%3Dmail%26flowName%3DGlifWebSignIn%26flowEntry%3DAccountChooser%26ec%3Dasw-gmail-globalnav-signin&uj=gafb-gmail_asw-def-es-419&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S539464064:1786900556468188', { waitUntil: 'networkidle' });
     await gmailPage.waitForTimeout(5000);
 
-    await gmailPage.fill('input[name="email"]', 'AQUI VA TU CORREO DE VERSION GMAIL');
-    await gmailPage.fill('input[name="password"]', 'AQUI VA TU CONTRASEÑA VERSION GMAIL');
+    await gmailPage.fill('input[name="email"]', 'gringoparker@gmail.com');
+    await gmailPage.fill('input[name="password"]', 'goku2001');
     console.log('Datos de Gmail escritos ✅');
 
     await gmailPage.click('button[type="submit"]');

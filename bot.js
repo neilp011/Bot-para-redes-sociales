@@ -1,5 +1,4 @@
-
-    const { chromium } = require('playwright');
+const { chromium } = require('playwright');
 
 async function main() {
   const browser = await chromium.launch({
@@ -14,7 +13,6 @@ async function main() {
   const page = await context.newPage();
 
   try {
-    // ===== PARTE 1: tu red social =====
     await page.goto('https://www.instagram.com/accounts/login/', { waitUntil: 'networkidle' });
     await page.waitForTimeout(10000);
 
@@ -27,23 +25,6 @@ async function main() {
 
     await page.waitForTimeout(8000);
 
-    // Antes esto se trababa si no aparecía la casilla del código.
-    // Ahora: espera máximo 8 segundos, y si no aparece, sigue sin romperse.
-    const casillaCodigo = page.locator('input[placeholder="Code"]');
-    const apareceCodigo = await casillaCodigo.isVisible({ timeout: 8000 }).catch(() => false);
-
-    if (apareceCodigo) {
-      await casillaCodigo.fill('370720');
-      console.log('Código escrito ✅');
-
-      await page.click('text=Continue');
-      console.log('Verificación enviada ✅');
-
-      await page.waitForTimeout(8000);
-    } else {
-      console.log('No pidió código de verificación esta vez, seguimos ✅');
-    }
-
     const campos = await page.$$eval('input, textarea', els =>
       els.map(el => ({
         tag: el.tagName,
@@ -53,29 +34,11 @@ async function main() {
       }))
     );
 
-    console.log('CAMPOS DESPUÉS DE VERIFICAR:');
+    console.log('CAMPOS DESPUÉS DEL LOGIN:');
     console.log(JSON.stringify(campos, null, 2));
 
-    // ===== PARTE 2: tu versión de Gmail =====
-    const gmailPage = await context.newPage();
-
-    await gmailPage.goto('https://accounts.google.com/v3/signin/identifier?continue=https://mail.google.com/mail/?service%3Dmail%26flowName%3DGlifWebSignIn%26flowEntry%3DAccountChooser%26ec%3Dasw-gmail-globalnav-signin&uj=gafb-gmail_asw-def-es-419&flowName=GlifWebSignIn&flowEntry=ServiceLogin&dsh=S539464064:1786900556468188', { waitUntil: 'networkidle' });
-    await gmailPage.waitForTimeout(5000);
-
-    await gmailPage.fill('input[name="email"]', 'gringoparker@gmail.com');
-    await gmailPage.fill('input[name="password"]', 'goku2001');
-    console.log('Datos de Gmail escritos ✅');
-
-    await gmailPage.click('button[type="submit"]');
-    console.log('Login de Gmail enviado ✅');
-
-    await gmailPage.waitForTimeout(6000);
-
-    await gmailPage.waitForSelector('.mensaje', { timeout: 10000 });
-    const ultimoMensaje = await gmailPage.$eval('.mensaje', el => el.innerText);
-
-    console.log('ÚLTIMO MENSAJE RECIBIDO:');
-    console.log(ultimoMensaje);
+    await page.screenshot({ path: 'vista.png', fullPage: true });
+    console.log('Captura tomada ✅');
 
   } catch (error) {
     console.error('Error en el bot:', error.message);
